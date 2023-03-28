@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>NLS Time Change App</title>
+</head>
+<body style="font-family:Arial">
+    <h1>NLS Time Change Utility</h1>
+    <div>
+        <h2> Current Date and Time is: <span id="current-time"></span></h2>
+        <h3> Hyper-V Time Sync <span id="service"></span></h3>
+        <form action="/servicesubmit" method="post"><input type="submit" value="Start/Stop" /></form>
+    </div>
+    <form actions="/" method="post">
+        <fieldset>
+            <label for="timeentry">Please Enter the time you wish to set: </label><br>
+            <input type="datetime-local" id="timeentry" name="timeentry" /><br>
+            <label for="IISreset">IIS Reset</label>
+            <input type="submit" id="IISreset" name="IISreset" value="reset" formaction="/iisreset" /><br />
+            <input type="submit" value="submit"/>
+        </fieldset>
+    </form>
+
+    <script>
+        const url1 = "/servicestatus"
+        const serElem = document.getElementById('service')
+        fetch(url1)
+            .then(response => response.text())
+            .then(data => {
+                const stat = data
+                const status = data.toString('en-US');
+                serElem.textContent = status;
+            });
+        
+    </script>
+
+
+    <script>
+        const url = "/current-time"
+        const timeElem = document.getElementById('current-time')
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                const date = new Date(data);
+                const options = {
+                    timeZone: 'American/Chicago',
+                    hour12: true,
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric'
+                };
+                const centraltime = data.toLocaleString('en-US', options);
+                timeElem.textContent = centraltime;
+            });
+    </script>
+
+
+</body>
+</html>
